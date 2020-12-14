@@ -4,11 +4,20 @@ import { phases } from '@/specs/turnSpecs';
 import { roomNames } from '@/specs/roomSpecs';
 
 class CpuEasy extends Cpu {
+  constructor (myPlayer, cards, coords, players) {
+    super(myPlayer, cards, coords, players);
+    this.suggestionDisprovedBy = {};
+  }
+
   // ========== OVERRIDDEN FUNCTIONS ==========
   startTurn (roomPaths, phase) {
     super.startTurn();
-    // Find the closest room that hasn't been disproven
-    this.targetPath = null;
+    this.targetPath = this.findClosestNonDisprovenPath(roomPaths);
+    return this.getNextMove(phase);
+  }
+
+  // Find the closest room that hasn't been disproven
+  findClosestNonDisprovenPath (roomPaths) {
     let disprovenRooms = this.getRoomsOfClueState(clueStates.DISPROVEN);
     // Filter out paths that are inaccessible and rooms that this player is already in
     let filteredRoomPaths = Object.keys(roomPaths).filter(room => roomPaths[room] !== undefined);
@@ -16,12 +25,12 @@ class CpuEasy extends Cpu {
       // If there is only one path that is available (in the case that a corner room's door is blocked),
       // take it even if the other room is disproven
       if (filteredRoomPaths.length === 1) {
-        this.targetPath = roomPaths[filteredRoomPaths[0]];
+        return roomPaths[filteredRoomPaths[0]];
       } else {
         // Filter out paths to disproven rooms
         filteredRoomPaths = filteredRoomPaths.filter(room => !disprovenRooms.includes(room));
         if (filteredRoomPaths.length === 0) {
-          filteredRoomPaths = Object.keys(roomPaths);
+          filteredRoomPaths = Object.keys(roomPaths).filter(room => roomPaths[room] !== undefined);
         }
         let closestRoom = filteredRoomPaths.reduce((closest, room) => {
           let closestSteps = roomPaths[closest].length;
@@ -35,10 +44,10 @@ class CpuEasy extends Cpu {
           }
           return closest;
         });
-        this.targetPath = roomPaths[closestRoom];
+        return roomPaths[closestRoom];
       }
     }
-    return this.getNextMove(phase);
+    return null;
   }
 
   // This method will return what the next move for the player will be
@@ -87,19 +96,23 @@ class CpuEasy extends Cpu {
   chooseSpaceToMove () {
     // Go down as far as you can down the target path
     let selectedSpace = null;
-    // The first space is the starting space, so exclude it
-    // The most amount of spaces the player can go is 6
-    this.targetPath.slice(1,7).forEach(space => {
-      if (this.availableMoves.hasOwnProperty(space) ||
-          this.availableMoves.hasOwnProperty(space.x) && this.availableMoves[space.x].hasOwnProperty(space.y)) {
-        selectedSpace = space;
-      }
-    });
+    if (this.targetPath) {
+      // The first space is the starting space, so exclude it
+      // The most amount of spaces the player can go is 6
+      this.targetPath.slice(1,7).forEach(space => {
+        if (this.availableMoves.hasOwnProperty(space) ||
+            this.availableMoves.hasOwnProperty(space.x) && this.availableMoves[space.x].hasOwnProperty(space.y)) {
+          selectedSpace = space;
+        }
+      });
+    } else {
+      selectedSpace = this.coordinates;
+    }
     return selectedSpace;
   }
 
   chooseSuspectToSuggest () {
-    if (!!this.accusation.suspect) {
+    if (this.accusation.suspect) {
       return this.accusation.suspect;
     }
     let possibleSuspects = this.getSuspectsNotOfClueState(clueStates.DISPROVEN);
@@ -108,7 +121,7 @@ class CpuEasy extends Cpu {
   }
 
   chooseWeaponToSuggest () {
-    if (!!this.accusation.weapon) {
+    if (this.accusation.weapon) {
       return this.accusation.weapon;
     }
     let possibleWeapons = this.getWeaponsNotOfClueState(clueStates.DISPROVEN);
@@ -145,25 +158,24 @@ class CpuEasy extends Cpu {
     this.checkDisprovenRooms();
   }
 
+  suggestAction () {
+    this.suggestionDisprovedBy = {};
+    return super.suggestAction();
+  }
+
   // Checks if all players were unable to disprove the suggestion
-  isSuggestionProven (suggestion) {
-    let { suspect, weapon, room } = suggestion;
-    return this.doAllPlayersNotOwn(suspect) && this.doAllPlayersNotOwn(weapon) && this.doAllPlayersNotOwn(room);
+  isSuggestionProven () {
+    return Object.keys(this.notepad).every(player => this.suggestionDisprovedBy[player] === false);
   }
 
   // An easy CPU only witnesses disprovals to their own suggestions
   witnessDisproval (player, canDisprove, suggestion) {
-    if (player !== this.myPlayer && this.myTurn) {
-      let { suspect, weapon, room } = suggestion;
-      if (!canDisprove) {
-        this.setNotepadNotOwned(player, suspect);
-        this.setNotepadNotOwned(player, weapon);
-        this.setNotepadNotOwned(player, room);
-        if (this.isSuggestionProven(suggestion)) {
-          this.accusation.suspect = suggestion.suspect;
-          this.accusation.weapon = suggestion.weapon;
-          this.accusation.room = suggestion.room;
-        }
+    if (this.myTurn && !canDisprove) {
+      this.suggestionDisprovedBy[player] = false;
+      if (this.isSuggestionProven()) {
+        this.accusation.suspect = suggestion.suspect;
+        this.accusation.weapon = suggestion.weapon;
+        this.accusation.room = suggestion.room;
       }
     }
   }

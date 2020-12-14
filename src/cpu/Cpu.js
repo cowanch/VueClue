@@ -78,7 +78,7 @@ class Cpu {
 
   // Returns whether all players in the notepad do not own a particular clue
   doAllPlayersNotOwn (clue) {
-    Object.keys(this.notepad).every(player => this.getNotepadState(player, clue) === notepadStates.NOT_OWNED);
+    return Object.keys(this.notepad).every(player => this.getNotepadState(player, clue) === notepadStates.NOT_OWNED);
   }
 
   // Given a list of clues, return a filtered list of clues in a certain notepad state
@@ -301,6 +301,7 @@ class Cpu {
   // Return the end turn action to the game
   endTurnAction () {
     this.myTurn = false;
+    this.targetPath = null;
     return { action: actions.END };
   }
   // ====================

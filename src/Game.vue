@@ -66,6 +66,7 @@ import turnPhases from '@/mixins/turnPhases.mixin';
 import pathfinding from '@/mixins/pathfinding.mixin';
 // Computer Player AI
 import CpuEasy from '@/cpu/CpuEasy';
+import CpuMedium from '@/cpu/CpuMedium';
 
 export default {
   name: 'Game',
@@ -193,7 +194,7 @@ export default {
         if (this.isValidRoom(this.turnPlayerPosition)) {
           this.turnPhase = this.phases.SUGGEST;
         } else {
-          this.endTurn();
+          this.turnPhase = this.phases.END;
         }
       }
     },
@@ -385,7 +386,11 @@ export default {
         this.dealCardsToPlayers(deck);
         this.turnOrder.forEach(player => {
           if (this.isCpuPlayer(player)) {
-            this.cpuPlayers[player] = new CpuEasy(player, this.playerCards[player], this.playerCoordinates[player], this.turnOrder);
+            if (this.playerSelections[player] === playerTypes.CPU_EASY) {
+              this.cpuPlayers[player] = new CpuEasy(player, this.playerCards[player], this.playerCoordinates[player], this.turnOrder);
+            } else if (this.playerSelections[player] === playerTypes.CPU_MEDIUM) {
+              this.cpuPlayers[player] = new CpuMedium(player, this.playerCards[player], this.playerCoordinates[player], this.turnOrder);
+            }
           }
         });
         this.currentTurn = 0;
@@ -407,7 +412,7 @@ export default {
       } else if (phase === this.phases.SUGGEST) {
         this.addMessage('Make a suggestion');
       }
-      if (this.isCpuPlayer(this.turnPlayer)) {
+      if (this.isCpuPlayer(this.turnPlayer) && !this.isRollPhase(phase)) {
         this.turnCpuPlayer.setCoordinates(this.playerCoordinates[this.turnPlayer]);
         this.cpuAction = this.turnCpuPlayer.getNextMove(phase);
       }
