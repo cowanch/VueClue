@@ -160,6 +160,8 @@ class CpuEasy extends Cpu {
 
   suggestAction () {
     this.suggestionDisprovedBy = {};
+    console.log('====================');
+    console.log(this.suggestionDisprovedBy);
     return super.suggestAction();
   }
 
@@ -170,7 +172,10 @@ class CpuEasy extends Cpu {
 
   // An easy CPU only witnesses disprovals to their own suggestions
   witnessDisproval (player, canDisprove, suggestion) {
+    console.log(`my turn? ${this.myTurn}`);
     if (this.myTurn && !canDisprove) {
+      console.log(`---------------${this.myPlayer}----------`);
+      console.log(player);
       this.suggestionDisprovedBy[player] = false;
       if (this.isSuggestionProven()) {
         this.accusation.suspect = suggestion.suspect;

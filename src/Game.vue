@@ -137,10 +137,11 @@ export default {
     Object.keys(this.suspects).forEach(player => {
       this.$set(this.playerCoordinates, player, null);
       this.$set(this.lastTurnCoordinates, player, null);
-      this.$set(this.playerSelections, player, playerTypes.DISABLED);
+      this.$set(this.playerSelections, player, playerTypes.CPU_EASY);
       this.$set(this.playerCards, player, []);
       this.$set(this.playerGameOver, player, false);
     });
+    this.playerSelections.scarlet = playerTypes.CPU_MEDIUM;
     let roomKeys = Object.keys(this.rooms);
     Object.keys(this.weapons).forEach(weapon => {
       let rand = Math.floor(Math.random() * roomKeys.length);
