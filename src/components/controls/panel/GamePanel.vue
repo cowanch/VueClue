@@ -211,13 +211,7 @@ export default {
         this.showSuggestionOptions = false;
         this.showAccusationOptions = false;
       }
-    },
-    // cpuAction: {
-    //   handler () {
-    //     this.handleCpuNext();
-    //   },
-    //   deep: true
-    // }
+    }
   },
   components: {
     GameDie,

@@ -301,7 +301,6 @@ class Cpu {
   // Return the end turn action to the game
   endTurnAction () {
     this.myTurn = false;
-    console.log('false');
     this.targetPath = null;
     return { action: actions.END };
   }
@@ -311,7 +310,6 @@ class Cpu {
   // The function that will call at the start of this player's turn
   startTurn () {
     this.myTurn = true;
-    console.log('true');
   }
 
   // Get the next move based on the current phase
