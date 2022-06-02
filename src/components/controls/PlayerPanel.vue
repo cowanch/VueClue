@@ -14,10 +14,12 @@
                 v-show="isTabOpen(tabs.GAME)"
                 v-bind="$attrs"
                 v-on="$listeners"
+                @suggest="highlightNotepad"
                 class="css-panel"/>
     <div class="css-notepad-and-cards"
          v-show="isTabOpen(tabs.NOTEPAD)">
-      <notepad class="css-panel"/>
+      <notepad class="css-panel"
+               :highlighted="notepadHighlights"/>
       <card-display :cards="cards"
                     :gridView="true"/>
     </div>
@@ -78,7 +80,8 @@ export default {
   },
   data () {
     return {
-      openTab: ''
+      openTab: '',
+      notepadHighlights: {}
     };
   },
   computed: {
@@ -107,6 +110,11 @@ export default {
     },
     isTabOpen (id) {
       return this.openTab === id;
+    },
+    highlightNotepad (suggestion) {
+      this.notepadHighlights[suggestion.suspect] = true;
+      this.notepadHighlights[suggestion.weapon] = true;
+      this.notepadHighlights[suggestion.room] = true;
     }
   },
   components: {

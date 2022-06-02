@@ -16,7 +16,8 @@
         <td colspan="7">SUSPECTS</td>
       </tr>
       <tr v-for="(name, key) in suspects"
-          :key="key">
+          :key="key"
+          :class="getRowClass(key)">
         <td class="css-name-col"
             @click="toggleNameState(key)">
           <span :class="getNameTextClass(key)">{{name}}</span>
@@ -31,7 +32,8 @@
         <td colspan="7">WEAPONS</td>
       </tr>
       <tr v-for="(name, key) in weapons"
-          :key="key">
+          :key="key"
+          :class="getRowClass(key)">
         <td class="css-name-col"
             @click="toggleNameState(key)">
           <span :class="getNameTextClass(key)">{{name}}</span>
@@ -46,7 +48,8 @@
         <td colspan="7">ROOMS</td>
       </tr>
       <tr v-for="(name, key) in rooms"
-          :key="key">
+          :key="key"
+          :class="getRowClass(key)">
         <td class="css-name-col"
             @click="toggleNameState(key)">
           <span :class="getNameTextClass(key)">{{name}}</span>
@@ -74,6 +77,7 @@ input {
   border: none;
   text-align: center;
   padding: inherit;
+  background-color: transparent;
 }
 td.css-name-col {
   cursor: pointer;
@@ -116,6 +120,9 @@ td.css-name-col:hover {
   right: -10%;
   position: absolute;
 }
+.css-highlight {
+  background-color: pink;
+}
 </style>
 
 <script>
@@ -130,6 +137,12 @@ const NAME_STATES = Object.freeze({
 export default {
   name: 'Notepad',
   mixins: [deck],
+  props: {
+    highlighted: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data () {
     return {
       notepad: {
@@ -177,6 +190,11 @@ export default {
         'css-cross-out': this.nameState[key] === NAME_STATES.CROSSED,
         'css-circle-over': this.nameState[key] === NAME_STATES.CIRCLED
       };
+    },
+    getRowClass (key) {
+      return {
+        'css-highlight': this.highlighted[key]
+      }
     }
   }
 };
