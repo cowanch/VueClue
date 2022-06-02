@@ -15,6 +15,7 @@
                 v-bind="$attrs"
                 v-on="$listeners"
                 @suggest="highlightNotepad"
+                @end-turn="resetHighlights"
                 class="css-panel"/>
     <div class="css-notepad-and-cards"
          v-show="isTabOpen(tabs.NOTEPAD)">
@@ -66,6 +67,8 @@ import CardDisplay from '@/components/controls/panel/CardDisplay';
 import GameNotepad from '@/components/controls/panel/GameNotepad';
 import GamePanel from '@/components/controls/panel/GamePanel';
 
+import deck from '@/mixins/deck.mixin';
+
 const TABS_ENUM = Object.freeze({
   NOTEPAD: 'notepad-cards',
   GAME: 'game'
@@ -73,6 +76,7 @@ const TABS_ENUM = Object.freeze({
 
 export default {
   name: 'PlayerPanel',
+  mixins: [deck],
   props: {
     cards: Array,
     messages: Array,
@@ -98,6 +102,11 @@ export default {
   },
   created () {
     this.openTab = this.tabs.NOTEPAD;
+
+    // Fill out the highlight states
+    Object.keys(this.suspects).forEach(suspect => this.$set(this.notepadHighlights, suspect, false));
+    Object.keys(this.weapons).forEach(weapon => this.$set(this.notepadHighlights, weapon, false));
+    Object.keys(this.rooms).forEach(room => this.$set(this.notepadHighlights, room, false));
   },
   methods: {
     setActiveTab (id) {
@@ -115,6 +124,9 @@ export default {
       this.notepadHighlights[suggestion.suspect] = true;
       this.notepadHighlights[suggestion.weapon] = true;
       this.notepadHighlights[suggestion.room] = true;
+    },
+    resetHighlights () {
+      Object.keys(this.notepadHighlights).forEach(key => this.notepadHighlights[key] = false);
     }
   },
   components: {
