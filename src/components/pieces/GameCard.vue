@@ -17,7 +17,7 @@
 import {cardDimensions, deck} from '@/specs/cardSpecs';
 
 export default {
-  name: 'Card',
+  name: 'GameCard',
   props: {
     size: {
       type: Number,

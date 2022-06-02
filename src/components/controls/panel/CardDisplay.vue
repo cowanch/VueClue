@@ -1,12 +1,12 @@
 <template>
   <div :class="{ 'css-player-cards-grid': gridView, 'css-player-cards': !gridView }">
-    <card v-for="(card) in cards"
-          :key="card"
-          class="css-card"
-          :class="{'css-hover':selection}"
-          :size="cardScale"
-          :id="card"
-          @click="() => emitCardSelected(card)"/>
+    <game-card v-for="(card) in cards"
+               :key="card"
+               class="css-card"
+               :class="{'css-hover':selection}"
+               :size="cardScale"
+               :id="card"
+               @click="() => emitCardSelected(card)"/>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
 </style>
 
 <script>
-import Card from '@/components/pieces/Card';
+import GameCard from '@/components/pieces/GameCard';
 
 export default {
   name: 'CardDisplay',
@@ -50,7 +50,7 @@ export default {
     }
   },
   components: {
-    Card
+    GameCard
   }
 };
 </script>

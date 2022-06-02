@@ -199,7 +199,7 @@ import cellScaling from '@/mixins/cellScaling.mixin';
 import moves from '@/mixins/moves.mixin';
 
 export default {
-  name: 'Rooms',
+  name: 'BoardRooms',
   mixins: [cellScaling,moves],
   props: {
     cellLineWidth: Number,

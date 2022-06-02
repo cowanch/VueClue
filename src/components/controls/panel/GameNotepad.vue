@@ -135,7 +135,7 @@ const NAME_STATES = Object.freeze({
 });
 
 export default {
-  name: 'Notepad',
+  name: 'GameNotepad',
   mixins: [deck],
   props: {
     highlighted: {

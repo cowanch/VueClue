@@ -3,10 +3,10 @@
 -->
 <template>
   <div class="css-container">
-    <board :token-coordinates="tokenCoordinates"
-           :available-moves="availableMoves"
-           @move="movePhase"
-           @passage="movePassage"/>
+    <game-board :token-coordinates="tokenCoordinates"
+                :available-moves="availableMoves"
+                @move="movePhase"
+                @passage="movePassage"/>
     <div class="css-options">
       <player-select v-if="selectingPlayers"
                      v-model="playerSelections"
@@ -50,7 +50,7 @@ body > div {
 
 <script>
 // Components
-import Board from '@/components/board/Board';
+import GameBoard from '@/components/board/GameBoard';
 import PlayerSelect from '@/components/controls/PlayerSelect';
 import PlayerPanel from '@/components/controls/PlayerPanel';
 // Specs
@@ -69,7 +69,7 @@ import CpuEasy from '@/cpu/CpuEasy';
 import CpuMedium from '@/cpu/CpuMedium';
 
 export default {
-  name: 'Game',
+  name: 'MainGame',
   mixins: [rooms, deckUtil, turnPhases, pathfinding],
   data () {
     return {
@@ -137,11 +137,10 @@ export default {
     Object.keys(this.suspects).forEach(player => {
       this.$set(this.playerCoordinates, player, null);
       this.$set(this.lastTurnCoordinates, player, null);
-      this.$set(this.playerSelections, player, playerTypes.CPU_EASY);
+      this.$set(this.playerSelections, player, playerTypes.DISABLED);
       this.$set(this.playerCards, player, []);
       this.$set(this.playerGameOver, player, false);
     });
-    this.playerSelections.scarlet = playerTypes.CPU_MEDIUM;
     let roomKeys = Object.keys(this.rooms);
     Object.keys(this.weapons).forEach(weapon => {
       let rand = Math.floor(Math.random() * roomKeys.length);
@@ -420,7 +419,7 @@ export default {
     }
   },
   components: {
-    Board,
+    GameBoard,
     PlayerSelect,
     PlayerPanel
   }

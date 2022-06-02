@@ -48,7 +48,7 @@
 const DOT_RADIUS = 9;
 
 export default {
-  name: 'Die',
+  name: 'GameDie',
   props: {
     value: {
       type: Number,

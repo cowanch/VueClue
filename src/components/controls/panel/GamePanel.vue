@@ -1,7 +1,7 @@
 <template>
   <div class="css-game-panel">
-    <die v-if="showDie"
-         :value="dieValue"/>
+    <game-die v-if="showDie"
+              :value="dieValue"/>
     <div v-if="!optionsShown">
       <template v-if="isHumanTurn">
         <button v-if="showDie"
@@ -66,7 +66,7 @@ textarea {
 </style>
 
 <script>
-import Die from '@/components/pieces/Die';
+import GameDie from '@/components/pieces/GameDie';
 import ClueOptions from '@/components/controls/panel/ClueOptions';
 import CardDisplay from '@/components/controls/panel/CardDisplay';
 import rooms from '@/mixins/rooms.mixin';
@@ -220,7 +220,7 @@ export default {
     // }
   },
   components: {
-    Die,
+    GameDie,
     ClueOptions,
     CardDisplay
   }

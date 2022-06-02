@@ -5,13 +5,13 @@
   <svg height="100%" width="50%">
     <g :transform="`translate(${cellSize}, ${cellSize})`"
        :style="cssVars">
-      <spaces v-bind="boardProps"
-              :available-moves="availableMoves"
-              @click="emitMove"/>
-      <rooms v-bind="boardProps"
-             :available-moves="availableMoves"
-             @click="emitMove"
-             @passage="emitPassage"/>
+      <board-spaces v-bind="boardProps"
+                    :available-moves="availableMoves"
+                    @click="emitMove"/>
+      <board-rooms v-bind="boardProps"
+                   :available-moves="availableMoves"
+                   @click="emitMove"
+                   @passage="emitPassage"/>
       <player-tokens v-bind="boardProps"
                      :coordinates="tokenCoordinates.players"/>
       <weapon-tokens v-bind="boardProps"
@@ -59,8 +59,8 @@ text.css-passage {
 
 <script>
 // Components
-import Spaces from '@/components/board/Spaces';
-import Rooms from '@/components/board/Rooms';
+import BoardSpaces from '@/components/board/BoardSpaces';
+import BoardRooms from '@/components/board/BoardRooms';
 import PlayerTokens from '@/components/pieces/PlayerTokens';
 import WeaponTokens from '@/components/pieces/WeaponTokens';
 // Mixins
@@ -71,7 +71,7 @@ const CELL_LINE_WIDTH = 2;
 const BORDER_WIDTH = 4;
 
 export default {
-  name: 'Board',
+  name: 'GameBoard',
   mixins: [moves],
   props: {
     tokenCoordinates: {
@@ -111,8 +111,8 @@ export default {
     }
   },
   components: {
-    Spaces,
-    Rooms,
+    BoardSpaces,
+    BoardRooms,
     PlayerTokens,
     WeaponTokens
   }

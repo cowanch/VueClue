@@ -59,7 +59,7 @@ import moves from '@/mixins/moves.mixin';
 import grid from '@/specs/boardSpecs';
 
 export default {
-  name: 'Spaces',
+  name: 'BoardSpaces',
   mixins: [cellScaling,moves],
   props: {
     cellLineWidth: Number

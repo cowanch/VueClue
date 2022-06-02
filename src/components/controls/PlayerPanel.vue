@@ -18,8 +18,8 @@
                 class="css-panel"/>
     <div class="css-notepad-and-cards"
          v-show="isTabOpen(tabs.NOTEPAD)">
-      <notepad class="css-panel"
-               :highlighted="notepadHighlights"/>
+      <game-notepad class="css-panel"
+                    :highlighted="notepadHighlights"/>
       <card-display :cards="cards"
                     :gridView="true"/>
     </div>
@@ -63,7 +63,7 @@
 
 <script>
 import CardDisplay from '@/components/controls/panel/CardDisplay';
-import Notepad from '@/components/controls/panel/Notepad';
+import GameNotepad from '@/components/controls/panel/GameNotepad';
 import GamePanel from '@/components/controls/panel/GamePanel';
 
 const TABS_ENUM = Object.freeze({
@@ -119,7 +119,7 @@ export default {
   },
   components: {
     CardDisplay,
-    Notepad,
+    GameNotepad,
     GamePanel
   }
 };
