@@ -10,6 +10,12 @@
        @click="$emit('click', 'study')">
       <polygon :points="`0,0 ${offset(6)},0 ${offset(6)},${offset(1)} ${offset(7)},${offset(1)} ${offset(7)},${offset(4)} 0,${offset(4)}`"
                :class="{ highlight: isAvailableMove('study') }"/>
+      <!-- Secret Passage to Kitchen -->
+      <rect :class="{ highlight: isAvailablePassage('kitchen') }"
+            :width="cellSize" :height="cellSize"
+            :transform="getXYTranslation(0, offsetScale+3)"
+            @click="$emit('passage', 'kitchen')"/>
+      <text class="css-passage" :x="offset(2.5)" :y="offset(3.8)">Secret Passage to Kitchen</text>
       <line class="door" :x1="offset(6)" :x2="offset(7)" :y1="offset(4)" :y2="offset(4)"/>
       <line :x1="-borderWidth/2" :x2="offset(6)+borderWidth/2" :y1="0" :y2="0"/>
       <line :x1="offset(6)" :x2="offset(6)" :y1="0" :y2="offset(1)"/>
@@ -65,6 +71,12 @@
       <polygon :points="`${offset(1)},0 ${offset(5)},0 ${offset(5)},${cell(1)} ${offset(6)},${cell(1)} ${offset(6)},${offset(5)}
                         0,${offset(5)} 0,${cell(1)} ${offset(1)},${cell(1)}`"
                :class="{ highlight: isAvailableMove('conservatory') }"/>
+      <!-- Secret Passage to Lounge -->
+      <rect :class="{ highlight: isAvailablePassage('lounge') }"
+            :width="cellSize" :height="cellSize"
+            :transform="getXYTranslation(offsetScale+1, 0)"
+            @click="$emit('passage', 'lounge')"/>
+      <text class="css-passage" :x="offset(1.5)" :y="cell(1.2)">Secret Passage to Lounge</text>
       <line class="door" :x1="offset(5)" :x2="offset(5)" :y1="0" :y2="cell(1)"/>
       <line :x1="offset(1)-borderWidth/2" :x2="offset(5)" :y1="0" :y2="0"/>
       <line :x1="offset(5)" :x2="offset(6)+borderWidth/2" :y1="cell(1)" :y2="cell(1)"/>
@@ -105,6 +117,12 @@
        @click="$emit('click', 'kitchen')">
       <polygon :points="`0,0 ${cell(5)},0 ${cell(5)},${cell(1)} ${offset(6)},${cell(1)} ${offset(6)},${offset(6)} 0,${offset(6)}`"
                :class="{ highlight: isAvailableMove('kitchen') }"/>
+      <!-- Secret Passage to Study -->
+      <rect :class="{ highlight: isAvailablePassage('study') }"
+            :width="cellSize" :height="cellSize"
+            :transform="getXYTranslation(0, offsetScale+5)"
+            @click="$emit('passage', 'study')"/>
+      <text class="css-passage" :x="offset(2.4)" :y="offset(5.8)">Secret Passage to Study</text>
       <line class="door" :x1="cell(1)" :x2="cell(2)" :y1="0" :y2="0"/>
       <line :x1="-borderWidth/2" :x2="cell(1)" :y1="0" :y2="0"/>
       <line :x1="cell(2)" :x2="cell(5)+borderWidth/2" :y1="0" :y2="0"/>
@@ -137,6 +155,12 @@
        @click="$emit('click', 'lounge')">
       <polygon :points="`${cell(1)},0 ${offset(7)},0 ${offset(7)},${offset(6)} 0,${offset(6)} 0,${offset(1)} ${cell(1)},${offset(1)}`"
                :class="{ highlight: isAvailableMove('lounge') }"/>
+      <!-- Secret Passage to Conservatory -->
+      <rect :class="{ highlight: isAvailablePassage('conservatory') }"
+            :width="cellSize" :height="cellSize"
+            :transform="getXYTranslation(offsetScale+6, offsetScale+5)"
+            @click="$emit('passage', 'conservatory')"/>
+      <text class="css-passage" :x="offset(3.7)" :y="offset(5.8)">Secret Passage to Conservatory</text>
       <line class="door" :x1="0" :x2="cell(1)" :y1="offset(6)" :y2="offset(6)"/>
       <line :x1="cell(1)-borderWidth/2" :x2="offset(7)+borderWidth/2" :y1="0" :y2="0"/>
       <line :x1="offset(7)" :x2="offset(7)" :y1="0" :y2="offset(6)"/>

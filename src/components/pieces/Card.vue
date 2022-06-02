@@ -1,6 +1,7 @@
 <template>
   <div class="css-card"
-       :style="{width:widthPx, height:heightPx}">
+       :style="{width:widthPx, height:heightPx}"
+       @click="() => $emit('click')">
     <p>{{cardText}}</p>
   </div>
 </template>

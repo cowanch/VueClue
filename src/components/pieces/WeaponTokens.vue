@@ -41,11 +41,11 @@
 
 <script>
 import cellScaling from '@/mixins/cellScaling.mixin';
-import rooms from '@/mixins/rooms.mixin';
+import roomCoords from '@/mixins/roomCoords.mixin';
 
 export default {
   name: 'WeaponTokens',
-  mixins: [cellScaling,rooms],
+  mixins: [cellScaling,roomCoords],
   props: {
     coordinates: {
       type: Object,

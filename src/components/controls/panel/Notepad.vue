@@ -83,7 +83,7 @@ td.css-name-col:hover {
 }
 .css-name-col {
   width: 218px;
-  padding: 2px 0px 2px 3%;
+  padding: 2px 0px 2px 15px;
 }
 .css-category-row > td, th {
   font-size: 20px;
@@ -119,7 +119,7 @@ td.css-name-col:hover {
 </style>
 
 <script>
-import {deck} from '@/specs/cardSpecs';
+import deck from '@/mixins/deck.mixin';
 
 const NAME_STATES = Object.freeze({
   'NONE': '',
@@ -129,6 +129,7 @@ const NAME_STATES = Object.freeze({
 
 export default {
   name: 'Notepad',
+  mixins: [deck],
   data () {
     return {
       notepad: {
@@ -141,17 +142,6 @@ export default {
       },
       nameState: {}
     };
-  },
-  computed: {
-    suspects () {
-      return deck.suspects;
-    },
-    weapons () {
-      return deck.weapons;
-    },
-    rooms () {
-      return deck.rooms;
-    }
   },
   created () {
     Object.values(this.notepad).forEach(player => {

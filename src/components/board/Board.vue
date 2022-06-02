@@ -10,7 +10,8 @@
               @click="emitMove"/>
       <rooms v-bind="boardProps"
              :available-moves="availableMoves"
-             @click="emitMove"/>
+             @click="emitMove"
+             @passage="emitPassage"/>
       <player-tokens v-bind="boardProps"
                      :coordinates="tokenCoordinates.players"/>
       <weapon-tokens v-bind="boardProps"
@@ -43,6 +44,14 @@ text {
   font-family: Helvetica, sans-serif;
   font-weight: bold;
   font-size: 20px;
+  text-anchor: middle;
+  dominant-baseline: middle
+}
+
+text.css-passage {
+  font-family: Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 10px;
   text-anchor: middle;
   dominant-baseline: middle
 }
@@ -93,6 +102,11 @@ export default {
     emitMove (moveTo) {
       if (this.isAvailableMove(moveTo)) {
         this.$emit('move', moveTo);
+      }
+    },
+    emitPassage (moveTo) {
+      if (this.isAvailablePassage(moveTo)) {
+        this.$emit('passage', moveTo);
       }
     }
   },

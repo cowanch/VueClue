@@ -1,25 +1,28 @@
 <template>
   <div>
     <div class="css-tab">
-      <button :class="getActiveTabClass('game')"
-              @click="setActiveTab('game')">
+      <button :class="getActiveTabClass(tabs.GAME)"
+              @click="setActiveTab(tabs.GAME)">
         Game
       </button>
-      <button :class="getActiveTabClass('notepad')"
-              @click="setActiveTab('notepad')">
-        Notepad
-      </button>
-      <button :class="getActiveTabClass('cards')"
-              @click="setActiveTab('cards')">
-        Cards
+      <button :class="getActiveTabClass(tabs.NOTEPAD)"
+              @click="setActiveTab(tabs.NOTEPAD)">
+        Notepad / Cards
       </button>
     </div>
-    <game-panel v-show="isTabOpen('game')"
-                :turn-phase="turnPhase"
-                @die-rolled="roll => $emit('die-rolled', roll)"/>
-    <notepad v-show="isTabOpen('notepad')"/>
-    <player-cards v-show="isTabOpen('cards')"
-                  :cards="cards"/>
+    <game-panel v-if="!playerWon"
+                v-show="isTabOpen(tabs.GAME)"
+                v-bind="$attrs"
+                v-on="$listeners"
+                class="css-panel"/>
+    <div class="css-notepad-and-cards"
+         v-show="isTabOpen(tabs.NOTEPAD)">
+      <notepad class="css-panel"/>
+      <card-display :cards="cards"
+                    :gridView="true"/>
+    </div>
+    <textarea readonly
+              :value="messagesString"/>
   </div>
 </template>
 
@@ -47,23 +50,51 @@
 .css-tab button.active {
   background-color: #ccc;
 }
+.css-panel {
+  margin-top: 20px;
+  margin-right: 100px;
+}
+.css-notepad-and-cards {
+  display: flex;
+}
 </style>
 
 <script>
-import PlayerCards from '@/components/controls/panel/PlayerCards';
+import CardDisplay from '@/components/controls/panel/CardDisplay';
 import Notepad from '@/components/controls/panel/Notepad';
 import GamePanel from '@/components/controls/panel/GamePanel';
+
+const TABS_ENUM = Object.freeze({
+  NOTEPAD: 'notepad-cards',
+  GAME: 'game'
+});
 
 export default {
   name: 'PlayerPanel',
   props: {
     cards: Array,
-    turnPhase: String
+    messages: Array,
+    playerWon: Boolean
   },
   data () {
     return {
-      openTab: 'cards'
+      openTab: ''
     };
+  },
+  computed: {
+    tabs () {
+      return TABS_ENUM;
+    },
+    messagesString () {
+      let text = '';
+      if (this.messages) {
+        this.messages.forEach(str => text+=`${str}\n`);
+      }
+      return text;
+    }
+  },
+  created () {
+    this.openTab = this.tabs.NOTEPAD;
   },
   methods: {
     setActiveTab (id) {
@@ -79,7 +110,7 @@ export default {
     }
   },
   components: {
-    PlayerCards,
+    CardDisplay,
     Notepad,
     GamePanel
   }

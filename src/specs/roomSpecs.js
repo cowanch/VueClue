@@ -40,7 +40,7 @@ export const roomCoordinates = {
     study: { x: 4, y: 2 },
     library: { x: 5, y: 9 },
     billiard: { x: 3, y: 12.5 },
-    conservatory: { x: 3.5, y: 23 },
+    conservatory: { x: 3.75, y: 23 },
     ballroom: { x: 12, y: 18 },
     kitchen: { x: 20.5, y: 19.5 },
     dining: { x: 20.5, y: 10 },
@@ -75,18 +75,18 @@ export const roomCoordinates = {
     billiard: { x: 0, y: 14.5 },
     conservatory: { x: 0, y: 20.5 },
     ballroom: { x: 9, y: 20 },
-    kitchen: { x: 18.5, y: 22 },
+    kitchen: { x: 18.5, y: 21 },
     dining: { x: 19.5, y: 13.5 },
     lounge: { x: 18.5, y: 0 },
     hall: { x: 9.5, y: 1 }
   },
   knife: {
-    study: { x: 2, y: 3 },
+    study: { x: 2, y: 2.75 },
     library: { x: 2, y: 6 },
     billiard: { x: 2, y: 15.5 },
-    conservatory: { x: 0, y: 22.5 },
+    conservatory: { x: 2.25, y: 19 },
     ballroom: { x: 11, y: 21 },
-    kitchen: { x: 22, y: 22 },
+    kitchen: { x: 22, y: 21.75 },
     dining: { x: 17.5, y: 12.5 },
     lounge: { x: 22, y: 3 },
     hall: { x: 11.5, y: 0 }
@@ -95,9 +95,9 @@ export const roomCoordinates = {
     study: { x: 1, y: 0 },
     library: { x: 1, y: 6.5 },
     billiard: { x: 1, y: 14.5 },
-    conservatory: { x: 1, y: 19.5 },
+    conservatory: { x: 1, y: 22.25 },
     ballroom: { x: 10, y: 20 },
-    kitchen: { x: 19.5, y: 22 },
+    kitchen: { x: 19.5, y: 21.5 },
     dining: { x: 20.5, y: 13.5 },
     lounge: { x: 19.5, y: 0 },
     hall: { x: 10.5, y: 0.5 }
@@ -106,9 +106,9 @@ export const roomCoordinates = {
     study: { x: 2, y: 0 },
     library: { x: 2, y: 7 },
     billiard: { x: 2, y: 14.5 },
-    conservatory: { x: 2, y: 22.5 },
+    conservatory: { x: 1.5, y: 20.5 },
     ballroom: { x: 11, y: 20 },
-    kitchen: { x: 22, y: 23 },
+    kitchen: { x: 22, y: 22.75 },
     dining: { x: 17.5, y: 13.5 },
     lounge: { x: 22, y: 2 },
     hall: { x: 11.5, y: 1 }
@@ -117,9 +117,9 @@ export const roomCoordinates = {
     study: { x: 4, y: 0 },
     library: { x: 1, y: 8.5 },
     billiard: { x: 4, y: 12.5 },
-    conservatory: { x: 2, y: 19.5 },
+    conservatory: { x: 2, y: 22.25 },
     ballroom: { x: 13, y: 20 },
-    kitchen: { x: 20.5, y: 22 },
+    kitchen: { x: 20.5, y: 21.5 },
     dining: { x: 21.5, y: 13.5 },
     lounge: { x: 20.5, y: 0 },
     hall: { x: 13.5, y: 1 }
@@ -128,9 +128,9 @@ export const roomCoordinates = {
     study: { x: 5, y: 0 },
     library: { x: 4, y: 6.5 },
     billiard: { x: 5, y: 12.5 },
-    conservatory: { x: 3, y: 19.5 },
+    conservatory: { x: 3, y: 22.25 },
     ballroom: { x: 14, y: 20 },
-    kitchen: { x: 23, y: 20 },
+    kitchen: { x: 23, y: 19.75 },
     dining: { x: 22.5, y: 13.5 },
     lounge: { x: 21.5, y: 0 },
     hall: { x: 13.5, y: 3.5 }
@@ -140,3 +140,13 @@ export const roomCoordinates = {
 let names = {};
 Object.values(roomCoordinates).forEach(rooms => Object.keys(rooms).forEach(roomName => names[roomName] = true));
 export const roomNames = Object.keys(names);
+
+let passages = {};
+let joinedRooms = [['study', 'kitchen'], ['lounge', 'conservatory']];
+joinedRooms.forEach(rooms => {
+  if (rooms.length === 2) {
+    passages[rooms[0]] = rooms[1];
+    passages[rooms[1]] = rooms[0];
+  }
+});
+export const secretPassages = passages;
