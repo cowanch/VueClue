@@ -260,6 +260,11 @@ class Cpu {
     return null;
   }
 
+  canDisproveSuggestion (suggestion) {
+    let { suspect, weapon, room } = suggestion;
+    return this.cards.includes(suspect) || this.cards.includes(weapon) || this.cards.includes(room);
+  }
+
   // ========== ACTION FUNCTIONS ==========
   // Return the roll action to the game
   rollAction () {

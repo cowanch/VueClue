@@ -20,7 +20,8 @@
     <div class="css-notepad-and-cards"
          v-show="isTabOpen(tabs.NOTEPAD)">
       <game-notepad class="css-panel"
-                    :highlighted="notepadHighlights"/>
+                    :highlighted="notepadHighlights"
+                    :debug-notes="debugNotes"/>
       <card-display :cards="cards"
                     :gridView="true"/>
     </div>
@@ -80,7 +81,8 @@ export default {
   props: {
     cards: Array,
     messages: Array,
-    playerWon: Boolean
+    playerWon: Boolean,
+    debugNotes: Object
   },
   data () {
     return {

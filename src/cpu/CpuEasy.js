@@ -160,7 +160,9 @@ class CpuEasy extends Cpu {
 
   suggestAction () {
     this.suggestionDisprovedBy = {};
-    return super.suggestAction();
+    let action = super.suggestAction();
+    this.suggestionDisprovedBy[this.myPlayer] = this.canDisproveSuggestion(action.suggestion);
+    return action;
   }
 
   // Checks if all players were unable to disprove the suggestion

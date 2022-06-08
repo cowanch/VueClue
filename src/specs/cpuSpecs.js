@@ -3,6 +3,7 @@
 **/
 export const actions = {
   ROLL: 'roll',
+  MOVE: 'move',
   SUGGEST: 'suggest',
   PASSAGE: 'passage',
   ACCUSE: 'accuse',

@@ -84,7 +84,8 @@ export default {
     cardSelection: Array,
     gameOver: Boolean,
     isHumanTurn: Boolean,
-    cpuAction: Object
+    cpuAction: Object,
+    debugMode: String
   },
   data () {
     return {
@@ -102,6 +103,9 @@ export default {
       },
       isDieRolling: false
     };
+  },
+  mounted () {
+    this.$emit('game-ready');
   },
   computed: {
     rollDisabled () {
@@ -211,6 +215,15 @@ export default {
         this.showSuggestionOptions = false;
         this.showAccusationOptions = false;
       }
+    },
+    // This is to automate the CPU turns
+    cpuAction: {
+      handler () {
+        if (this.debugMode) {
+          this.handleCpuNext();
+        }
+      },
+      deep: true
     }
   },
   components: {

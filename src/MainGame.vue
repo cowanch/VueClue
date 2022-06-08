@@ -11,6 +11,9 @@
       <player-select v-if="selectingPlayers"
                      v-model="playerSelections"
                      @finish="selectingPlayers=false"/>
+      <debug-menu v-if="selectingPlayers"
+                  v-model="playerSelections"
+                  @debug="setDebugMode"/>
       <player-panel v-else
                     :cards="playerCards[humanPlayer]"
                     :messages="messages"
@@ -21,6 +24,9 @@
                     :game-over="playerGameOver[this.turnPlayer]"
                     :is-human-turn="isHumanPlayer(this.turnPlayer)"
                     :cpu-action="cpuAction"
+                    :debug-mode="debugMode"
+                    :debug-notes="debugNotes"
+                    @game-ready="gameReady"
                     @die-rolled="rollPhase"
                     @suggest="suggestPhase"
                     @accuse="accusePhase"
@@ -53,6 +59,7 @@ body > div {
 import GameBoard from '@/components/board/GameBoard';
 import PlayerSelect from '@/components/controls/PlayerSelect';
 import PlayerPanel from '@/components/controls/PlayerPanel';
+import DebugMenu from '@/components/controls/DebugMenu';
 // Specs
 import startingPositions from '@/specs/startingPositions';
 import { playerTypes } from '@/specs/playerTypeSpecs';
@@ -67,6 +74,7 @@ import pathfinding from '@/mixins/pathfinding.mixin';
 // Computer Player AI
 import CpuEasy from '@/cpu/CpuEasy';
 import CpuMedium from '@/cpu/CpuMedium';
+import CpuDebug from '@/cpu/CpuDebug';
 
 export default {
   name: 'MainGame',
@@ -88,7 +96,10 @@ export default {
       messages: [],
       cardSelection: [],
       cpuPlayers: {},
-      cpuAction: null
+      cpuAction: null,
+      debugMode: null,
+      debug: null,
+      debugNotes: {}
     };
   },
   computed: {
@@ -154,9 +165,7 @@ export default {
       return this.playerSelections[player] === playerTypes.HUMAN;
     },
     isCpuPlayer (player) {
-      return this.playerSelections[player] === playerTypes.CPU_EASY ||
-             this.playerSelections[player] === playerTypes.CPU_MEDIUM ||
-             this.playerSelections[player] === playerTypes.CPU_HARD;
+      return [playerTypes.CPU_EASY, playerTypes.CPU_MEDIUM, playerTypes.CPU_HARD].includes(this.playerSelections[player]);
     },
     getRemainingDeckAfterPickingEnvelopeCards () {
       let suspectDeck = shuffle(Object.keys(this.suspects));
@@ -174,6 +183,12 @@ export default {
       deck.forEach((card, index) => {
         this.playerCards[this.turnOrder[index % playerCount]].push(card);
       });
+    },
+    gameReady () {
+      if (this.debugMode) {
+        this.debug = new CpuDebug(this.debugMode, this.envelope);
+      }
+      this.currentTurn = 0;
     },
     rollPhase (roll) {
       if (this.isRollPhase(this.turnPhase)) {
@@ -316,7 +331,11 @@ export default {
         } else {
           Object.keys(this.rooms).forEach(room => paths[room] = this.findShortestPathToRoomFromRoom(this.turnPlayerPosition, room));
         }
-        this.cpuAction = this.turnCpuPlayer.startTurn(paths, this.turnPhase);
+        if (this.debug) {
+          this.cpuAction = this.debug.startTurn(this.turnCpuPlayer, paths, this.turnPhase);
+        } else {
+          this.cpuAction = this.turnCpuPlayer.startTurn(paths, this.turnPhase);
+        }
       }
     },
     cpuNext () {
@@ -347,6 +366,10 @@ export default {
     },
     clearMessages () {
       this.messages = [];
+    },
+    setDebugMode (mode) {
+      this.debugMode = mode;
+      this.selectingPlayers = false;
     }
   },
   watch: {
@@ -393,7 +416,6 @@ export default {
             }
           }
         });
-        this.currentTurn = 0;
       }
     },
     turnPhase (phase) {
@@ -414,14 +436,25 @@ export default {
       }
       if (this.isCpuPlayer(this.turnPlayer) && !this.isRollPhase(phase)) {
         this.turnCpuPlayer.setCoordinates(this.playerCoordinates[this.turnPlayer]);
-        this.cpuAction = this.turnCpuPlayer.getNextMove(phase);
+        if (this.debug) {
+          this.cpuAction = this.debug.getNextMove(this.turnCpuPlayer, phase);
+          if (this.turnCpuPlayer.myPlayer === this.turnOrder[0]) {
+            this.debugNotes = {
+              notepad: this.turnCpuPlayer.notepad,
+              accuse: this.turnCpuPlayer.accusation
+            }
+          }
+        } else {
+          this.cpuAction = this.turnCpuPlayer.getNextMove(phase);
+        }
       }
     }
   },
   components: {
     GameBoard,
     PlayerSelect,
-    PlayerPanel
+    PlayerPanel,
+    DebugMenu
   }
 };
 </script>

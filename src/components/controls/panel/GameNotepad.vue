@@ -127,6 +127,7 @@ td.css-name-col:hover {
 
 <script>
 import deck from '@/mixins/deck.mixin';
+import { notepadStates } from '@/specs/cpuSpecs';
 
 const NAME_STATES = Object.freeze({
   'NONE': '',
@@ -139,6 +140,10 @@ export default {
   mixins: [deck],
   props: {
     highlighted: {
+      type: Object,
+      default: () => {}
+    },
+    debugNotes: {
       type: Object,
       default: () => {}
     }
@@ -195,6 +200,34 @@ export default {
       return {
         'css-highlight': this.highlighted[key]
       }
+    }
+  },
+  watch: {
+    debugNotes: {
+      handler (dNotes) {
+        Object.keys(dNotes.notepad).forEach((name, idx) => {
+          this.notepad[`p${idx+1}`].name = name;
+          Object.keys(dNotes.notepad[name]).forEach(clue => {
+            if (dNotes.notepad[name][clue] === notepadStates.OWNED) {
+              this.notepad[`p${idx+1}`][clue] = 'O';
+              this.nameState[clue] = NAME_STATES.CROSSED;
+            } else if (dNotes.notepad[name][clue] === notepadStates.NOT_OWNED) {
+              this.notepad[`p${idx+1}`][clue] = 'X';
+            }
+          });
+        });
+        let { suspect, weapon, room } = dNotes.accuse;
+        if (suspect) {
+          this.nameState[suspect] = NAME_STATES.CIRCLED;
+        }
+        if (weapon) {
+          this.nameState[weapon] = NAME_STATES.CIRCLED;
+        }
+        if (room) {
+          this.nameState[room] = NAME_STATES.CIRCLED;
+        }
+      },
+      deep: true      
     }
   }
 };
