@@ -39,7 +39,7 @@ import {playerTypes} from '@/specs/playerTypeSpecs';
 export default {
   name: 'PlayerSelect',
   props: {
-    value: {
+    modelValue: {
       type: Object,
       required: true,
       validator: (val) => val.hasOwnProperty('scarlet') && val.hasOwnProperty('mustard') && val.hasOwnProperty('white')
@@ -60,7 +60,7 @@ export default {
       return { scarlet: 'Miss Scarlet', mustard: 'Colonel Mustard', white: 'Mrs. White', green: 'Mr. Green', peacock: 'Miss Peacock', plum: 'Prof. Plum' };
     },
     isMinimumSelected () {
-      return Object.values(this.value).filter(val => val !== playerTypes.DISABLED).length >= 3;
+      return Object.values(this.modelValue).filter(val => val !== playerTypes.DISABLED).length >= 3;
     },
     isHumanPlayerSelected () {
       return Object.values(this.selections).some(selection => selection === playerTypes.HUMAN);
@@ -68,7 +68,7 @@ export default {
   },
   data () {
     return {
-      selections: this.value
+      selections: this.modelValue
     }
   },
   methods: {
@@ -79,11 +79,11 @@ export default {
   watch: {
     selections: {
       handler (selected) {
-        this.$emit('input', selected);
+        this.$emit('update:modelValue', selected);
       },
       deep: true
     },
-    value: {
+    modelValue: {
       handler (val) {
         this.selections = val;
       },

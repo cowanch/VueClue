@@ -66,7 +66,7 @@ import WeaponTokens from '@/components/pieces/WeaponTokens';
 // Mixins
 import moves from '@/mixins/moves.mixin';
 
-const CELL_SIZE = 35;
+const CELL_SIZE = 34;
 const CELL_LINE_WIDTH = 2;
 const BORDER_WIDTH = 4;
 

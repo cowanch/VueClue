@@ -60,7 +60,7 @@ export default {
   name: 'ClueOptions',
   mixins: [deck],
   props: {
-    value: {
+    modelValue: {
       type: Object,
       validator: (val) => val.hasOwnProperty('suspect') && val.hasOwnProperty('weapon')
     },
@@ -79,9 +79,9 @@ export default {
     selected: {
       handler (val) {
         if (!this.room) {
-          this.$emit('input', val);
+          this.$emit('update:modelValue', val);
         } else {
-          this.$emit('input', {
+          this.$emit('update:modelValue', {
             suspect: val.suspect,
             weapon: val.weapon,
             room: this.room
@@ -90,7 +90,7 @@ export default {
       },
       deep: true
     },
-    value (val) {
+    modelValue (val) {
       if (val.suspect !== this.selected.suspect) {
         this.selected.suspect = val.suspect;
       }

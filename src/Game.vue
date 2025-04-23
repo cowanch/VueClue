@@ -41,6 +41,7 @@ body > div {
 
 .css-container {
   display: flex;
+  height: 100%;
 }
 
 .css-options {
@@ -134,16 +135,16 @@ export default {
   created () {
     // Set up the different player settings
     Object.keys(this.suspects).forEach(player => {
-      this.$set(this.playerCoordinates, player, null);
-      this.$set(this.lastTurnCoordinates, player, null);
-      this.$set(this.playerSelections, player, playerTypes.DISABLED);
-      this.$set(this.playerCards, player, []);
-      this.$set(this.playerGameOver, player, false);
+      this.playerCoordinates[player] = null;
+      this.lastTurnCoordinates[player] = null;
+      this.playerSelections[player] = playerTypes.DISABLED;
+      this.playerCards[player] = [];
+      this.playerGameOver[player] = false;
     });
     let roomKeys = Object.keys(this.rooms);
     Object.keys(this.weapons).forEach(weapon => {
       let rand = Math.floor(Math.random() * roomKeys.length);
-      this.$set(this.weaponCoordinates, weapon, roomKeys[rand]);
+      this.weaponCoordinates[weapon] = roomKeys[rand];
       roomKeys.splice(rand, 1);
     });
     this.addMessage('Welcome to Clue!');

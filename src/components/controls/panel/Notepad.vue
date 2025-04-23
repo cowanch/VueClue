@@ -145,23 +145,23 @@ export default {
   },
   created () {
     Object.values(this.notepad).forEach(player => {
-      this.$set(player, 'name', '');
+      player.name = '';
       Object.keys(this.suspects).forEach(suspect => {
-        this.$set(player, suspect, '');
+        player[suspect] = '';
         if (!this.nameState.hasOwnProperty(suspect)) {
-          this.$set(this.nameState, suspect, '');
+          this.nameState[suspect] = '';
         }
       });
       Object.keys(this.weapons).forEach(weapon => {
-        this.$set(player, weapon, '');
+        player[weapon] = '';
         if (!this.nameState.hasOwnProperty(weapon)) {
-          this.$set(this.nameState, weapon, '');
+          this.nameState[weapon] = '';
         }
       });
       Object.keys(this.rooms).forEach(room => {
-        this.$set(player, room, '');
+        player[room] = '';
         if (!this.nameState.hasOwnProperty(room)) {
-          this.$set(this.nameState, room, '');
+          this.nameState[room] = '';
         }
       });
     });
